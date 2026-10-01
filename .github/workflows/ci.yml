@@ -32,7 +32,11 @@ jobs:
         run: python -m py_compile app.py
 
       - name: Build Docker image
-        run: docker build -t ghcr.io/nasarul10/devops-demo:${{ github.sha }} .
+        run: |
+          docker build \
+            -t ghcr.io/nasarul10/devops-demo:${{ github.sha }} \
+            -t ghcr.io/nasarul10/devops-demo:latest \
+            .
 
       - name: Log in to GitHub Container Registry
         if: github.event_name == 'push'
@@ -44,4 +48,6 @@ jobs:
 
       - name: Push Docker image
         if: github.event_name == 'push'
-        run: docker push ghcr.io/nasarul10/devops-demo:${{ github.sha }}
+        run: |
+          docker push ghcr.io/nasarul10/devops-demo:${{ github.sha }}
+          docker push ghcr.io/nasarul10/devops-demo:latest
